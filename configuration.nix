@@ -71,8 +71,8 @@
   console.keyMap = "cz";
 
   # Don't suspend when the lid is closed.
-  services.logind.lidSwitch = "ignore";
-  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login.HandleLidSwitch = "ignore";
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 
   users.users.david = {
     isNormalUser = true;
