@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./zsh.nix
+    ./userspace.nix
   ];
 
   # Bootloader.
@@ -53,6 +53,7 @@
   environment.systemPackages = with pkgs; [
     vim
     git
+    kitty
   ];
 
   # Enable the OpenSSH daemon. This opens port 22 in the firewall automatically.
