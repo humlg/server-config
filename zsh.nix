@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  environment.systemPackages = [ pkgs.fastfetch ];
+
   programs.zsh = {
     enable = true;
     autosuggestions.enable = true;

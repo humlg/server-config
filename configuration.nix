@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./zsh.nix
   ];
 
   # Bootloader.
@@ -44,6 +45,7 @@
     isNormalUser = true;
     description = "David";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
   };
 
   nixpkgs.config.allowUnfree = true;
