@@ -4,6 +4,11 @@
   imports = [
     ./hardware-configuration.nix
     ./userspace.nix
+    ./modules/storage.nix
+    ./modules/vpn.nix
+    ./modules/media.nix
+    ./modules/home-assistant.nix
+    ./modules/minecraft.nix
   ];
 
   # Bootloader.
