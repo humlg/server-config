@@ -15,6 +15,11 @@
   networking.hostName = "HomeLab";
   networking.networkmanager.enable = true;
 
+  # Bare `nix` CLI calls (e.g. `nix flake update`) need this enabled too —
+  # nixos-rebuild --flake enables it internally for its own calls, but that
+  # doesn't cover other nix invocations.
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Set your time zone.
   time.timeZone = "Europe/Prague";
 
