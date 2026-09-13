@@ -15,11 +15,21 @@
 
   networking.hostName = "HomeLab";
   networking.networkmanager.enable = true;
+  networking.firewall.enable = true;
 
   # Bare `nix` CLI calls (e.g. `nix flake update`) need this enabled too —
   # nixos-rebuild --flake enables it internally for its own calls, but that
   # doesn't cover other nix invocations.
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Prague";
@@ -41,6 +51,10 @@
   # Headless box: only the console keymap matters, no X11.
   console.keyMap = "cz";
 
+  # Don't suspend when the lid is closed.
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchExternalPower = "ignore";
+
   users.users.david = {
     isNormalUser = true;
     description = "David";
@@ -57,7 +71,18 @@
   ];
 
   # Enable the OpenSSH daemon. This opens port 22 in the firewall automatically.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
+
+  services.fail2ban.enable = true;
+
+  services.thermald.enable = true;
+  services.smartd.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

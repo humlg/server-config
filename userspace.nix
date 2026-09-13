@@ -13,6 +13,13 @@
     tree
     fzf
     mc
+    lm_sensors
+    smartmontools
+    tmux
+    ncdu
+    iotop
+    nethogs
+    rsync
   ];
 
   programs.zsh = {
