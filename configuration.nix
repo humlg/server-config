@@ -17,6 +17,20 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
 
+  # Static IP on the LAN uplink.
+  networking.networkmanager.ensureProfiles.profiles."enp59s0" = {
+    connection = {
+      id = "enp59s0";
+      type = "ethernet";
+      interface-name = "enp59s0";
+    };
+    ipv4 = {
+      method = "manual";
+      address1 = "192.168.5.1/23,192.168.4.1";
+      dns = "192.168.4.1;";
+    };
+  };
+
   # Bare `nix` CLI calls (e.g. `nix flake update`) need this enabled too —
   # nixos-rebuild --flake enables it internally for its own calls, but that
   # doesn't cover other nix invocations.
