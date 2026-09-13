@@ -20,6 +20,7 @@
     iotop
     nethogs
     rsync
+    claude-code
   ];
 
   programs.zsh = {
