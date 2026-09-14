@@ -19,16 +19,14 @@
         max-players = 20;
       };
 
-      # Add mods here as fetched derivations, e.g.:
+      # Mods are added via symlinks into the server directory, e.g.:
       #
-      #   "distant-horizons" = pkgs.fetchurl {
+      #   symlinks."mods/distant-horizons.jar" = pkgs.fetchurl {
       #     url = "https://cdn.modrinth.com/data/<id>/versions/<ver>/distant-horizons-<ver>.jar";
-      #     sha256 = lib.fakeSha256; # run `nix build` once to get the real hash
+      #     sha256 = "sha256-<hash>=";
       #   };
       #
-      # Grab the CDN URL from the Modrinth version page → "Download" button → copy link.
       # Mods needed: Distant Horizons (server-side), Xaero's Minimap, Xaero's World Map.
-      mods = {};
     };
   };
 
