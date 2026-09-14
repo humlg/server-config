@@ -4,13 +4,13 @@
   services.minecraft-servers = {
     enable = true;
     eula = true;
+    dataDir = "/mnt/data/minecraft";
 
     servers.main = {
       enable = true;
       # Verify the exact attribute name after `nix flake update`:
       #   nix eval .#nixosConfigurations.HomeLab.pkgs.fabricServers --apply builtins.attrNames
       package = pkgs.fabricServers."fabric-1_26_2";
-      dataDir = "/mnt/data/minecraft";
 
       serverProperties = {
         server-port = 25565;
