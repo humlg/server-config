@@ -16,10 +16,10 @@
 
   # Forward host:8123 into the HAOS VM on the libvirt NAT network.
   # 192.168.122.71 is pinned via a static DHCP reservation on the libvirt default network.
-  networking.firewall.extraCommands = ''
-    iptables -t nat -A PREROUTING -p tcp --dport 8123 -j DNAT --to-destination 192.168.122.71:8123
-  '';
-  networking.firewall.extraStopCommands = ''
-    iptables -t nat -D PREROUTING -p tcp --dport 8123 -j DNAT --to-destination 192.168.122.71:8123 2>/dev/null || true
-  '';
+  # Forward host:8123 into the HAOS VM. networking.nat is already enabled in vpn.nix;
+  # forwardPorts wires up both the DNAT and the FORWARD ACCEPT within NixOS's managed chains.
+  # 192.168.122.71 is pinned via a static DHCP reservation on the libvirt default network.
+  networking.nat.forwardPorts = [
+    { proto = "tcp"; sourcePort = 8123; destination = "192.168.122.71:8123"; }
+  ];
 }
