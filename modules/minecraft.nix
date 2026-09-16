@@ -10,7 +10,7 @@
       enable = true;
       # Verify the exact attribute name after `nix flake update`:
       #   nix eval .#nixosConfigurations.HomeLab.pkgs.fabricServers --apply builtins.attrNames
-      package = pkgs.fabricServers."fabric-1_26_2";
+      package = pkgs.fabricServers."fabric-26_2";
 
       serverProperties = {
         server-port = 25565;
