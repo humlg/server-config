@@ -18,5 +18,6 @@
     "d /mnt/data/downloads/incomplete 0775 root media -"
     "d /mnt/data/minecraft 0755 minecraft minecraft -"
     "d /mnt/data/home-assistant 0750 hass hass -"
+    "d /mnt/data/home-assistant-vm 0755 qemu-libvirtd qemu-libvirtd -"
   ];
 }
