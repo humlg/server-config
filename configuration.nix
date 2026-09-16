@@ -87,6 +87,7 @@
     vim
     git
     kitty
+    usbutils
   ];
 
   # Enable the OpenSSH daemon. This opens port 22 in the firewall automatically.
