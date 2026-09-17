@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
 let
-  # Network XML is kept in the Nix store so the firewall backend='none' setting
-  # (which prevents libvirt from inserting its own FORWARD REJECT rules) survives
-  # reboots. The haos-vm service redefines it on every boot before starting the VM.
   networkXml = pkgs.writeText "haos-libvirt-network.xml" ''
     <network>
       <name>default</name>
@@ -13,7 +10,6 @@ let
       </forward>
       <bridge name='virbr0' stp='on' delay='0'/>
       <mac address='52:54:00:e2:9e:e0'/>
-      <firewall backend='none'/>
       <ip address='192.168.122.1' netmask='255.255.255.0'>
         <dhcp>
           <range start='192.168.122.2' end='192.168.122.254'/>
@@ -30,29 +26,31 @@ in
   };
   users.users.david.extraGroups = [ "libvirtd" ];
 
-  # Disable libvirt's own firewall management globally so it doesn't insert
-  # FORWARD REJECT rules that block our NixOS-managed port forwarding.
-  environment.etc."libvirt/network.conf".text = ''
-    firewall_backend = "none"
-  '';
-
   services.glances.enable = true;
 
+  # nginx proxies port 8123 on the host's LAN IP to the HAOS VM over the
+  # libvirt NAT network. Simpler and more reliable than iptables DNAT, which
+  # conflicts with libvirt's own FORWARD rules regardless of firewall backend
+  # settings. 192.168.122.71 is pinned via the static DHCP reservation above.
+  services.nginx = {
+    enable = true;
+    streamConfig = ''
+      server {
+        listen 8123;
+        proxy_pass 192.168.122.71:8123;
+      }
+    '';
+  };
+  # VM internet access: libvirt's NAT handles this internally via its own
+  # MASQUERADE; no internalInterfaces entry needed here.
+  networking.nat.internalInterfaces = [ "virbr0" ];
+
   networking.firewall.allowedTCPPorts = [
-    8123   # HAOS web UI
+    8123   # HAOS (nginx proxy)
     61208  # Glances REST API
   ];
 
-  # NixOS owns all forwarding rules for virbr0 (libvirt firewall is disabled above).
-  # internalInterfaces handles VM internet access; forwardPorts handles inbound to HAOS.
-  # 192.168.122.71 is pinned via the static DHCP reservation in networkXml above.
-  networking.nat.internalInterfaces = [ "virbr0" ];
-  networking.nat.forwardPorts = [
-    { proto = "tcp"; sourcePort = 8123; destination = "192.168.122.71:8123"; }
-  ];
-
-  # Configures the libvirt network and starts the HAOS VM on every boot.
-  # Replaces libvirt's own autostart so the network firewall config is always correct.
+  # Manages the libvirt network and HAOS VM on every boot.
   systemd.services.haos-vm = {
     description = "Home Assistant OS VM";
     after = [ "libvirtd.service" ];
@@ -70,10 +68,7 @@ in
       virsh -c "$uri" net-autostart default --disable 2>/dev/null || true
       virsh -c "$uri" autostart homeassistant --disable 2>/dev/null || true
 
-      # net-define only updates the persisted XML; the running network keeps its old
-      # firewall rules. Restart it so firewall backend=none actually takes effect.
       if virsh -c "$uri" net-info default 2>/dev/null | grep -q "Active:.*yes"; then
-        # Gracefully shut down the VM before destroying the network
         vm_state=$(virsh -c "$uri" domstate homeassistant 2>/dev/null || echo "absent")
         if ! echo "$vm_state" | grep -qE "shut off|absent"; then
           virsh -c "$uri" shutdown homeassistant 2>/dev/null || true
