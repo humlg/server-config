@@ -7,6 +7,8 @@
   environment.systemPackages = [ pkgs.rtl-sdr ];
 
   # Allow the kernel driver to be used by non-root via udev rules.
+  # If the dongle was already plugged in before first deploy, the rules won't
+  # apply automatically — run: sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=usb --action=add
   hardware.rtl-sdr.enable = true;
 
   systemd.services.rtl-tcp = {
