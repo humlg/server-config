@@ -30,6 +30,12 @@ in
   };
   users.users.david.extraGroups = [ "libvirtd" ];
 
+  # Disable libvirt's own firewall management globally so it doesn't insert
+  # FORWARD REJECT rules that block our NixOS-managed port forwarding.
+  environment.etc."libvirt/network.conf".text = ''
+    firewall_backend = "none"
+  '';
+
   services.glances.enable = true;
 
   networking.firewall.allowedTCPPorts = [
