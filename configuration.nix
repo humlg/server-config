@@ -9,6 +9,7 @@
     ./modules/media.nix
     ./modules/home-assistant.nix
     ./modules/minecraft.nix
+    ./modules/rtl-sdr.nix
   ];
 
   # Bootloader.
