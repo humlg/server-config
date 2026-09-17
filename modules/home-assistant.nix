@@ -40,10 +40,11 @@ in
         proxyPass = "http://192.168.122.71:8123";
         proxyWebsockets = true;
         extraConfig = ''
-          proxy_set_header Host $host;
+          proxy_set_header Host $host:$server_port;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
-          proxy_redirect http://192.168.122.71/ http://$host:8123/;
+          proxy_redirect http://192.168.122.71/ http://$host:$server_port/;
+          proxy_redirect ~^http://[^/]+/(.*)$ http://$host:$server_port/$1;
         '';
       };
     };
