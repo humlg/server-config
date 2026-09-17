@@ -34,12 +34,19 @@ in
   # settings. 192.168.122.71 is pinned via the static DHCP reservation above.
   services.nginx = {
     enable = true;
-    streamConfig = ''
-      server {
-        listen 8123;
-        proxy_pass 192.168.122.71:8123;
-      }
-    '';
+    virtualHosts."haos" = {
+      listen = [{ addr = "0.0.0.0"; port = 8123; }];
+      locations."/" = {
+        proxyPass = "http://192.168.122.71:8123";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_redirect http://192.168.122.71/ http://$host:8123/;
+        '';
+      };
+    };
   };
   # VM internet access: libvirt's NAT handles this internally via its own
   # MASQUERADE; no internalInterfaces entry needed here.
