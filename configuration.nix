@@ -22,17 +22,31 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
 
-  # Static IP on the LAN uplink.
-  networking.networkmanager.ensureProfiles.profiles."enp59s0" = {
-    connection = {
-      id = "enp59s0";
-      type = "ethernet";
-      interface-name = "enp59s0";
+  # Bridge br0 over enp59s0 so the HAOS VM gets its own LAN IP via libvirt
+  # bridge networking. The static IP moves from enp59s0 to br0; enp59s0
+  # becomes a plain bridge port with no address of its own.
+  networking.networkmanager.ensureProfiles.profiles = {
+    "br0" = {
+      connection = {
+        id = "br0";
+        type = "bridge";
+        interface-name = "br0";
+      };
+      bridge.stp = "false";
+      ipv4 = {
+        method = "manual";
+        address1 = "192.168.5.1/23,192.168.4.1";
+        dns = "192.168.4.1;";
+      };
     };
-    ipv4 = {
-      method = "manual";
-      address1 = "192.168.5.1/23,192.168.4.1";
-      dns = "192.168.4.1;";
+    "enp59s0" = {
+      connection = {
+        id = "enp59s0";
+        type = "ethernet";
+        interface-name = "enp59s0";
+        master = "br0";
+        slave-type = "bridge";
+      };
     };
   };
 

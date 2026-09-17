@@ -23,7 +23,7 @@
   networking.nat = {
     enable = true;
     internalInterfaces = [ "wg0" ];
-    externalInterface = "enp59s0";
+    externalInterface = "br0";
   };
 
   networking.firewall = {
