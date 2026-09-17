@@ -44,6 +44,25 @@ encryption key) are **not committed to git** — deployed out-of-band on
 HomeLab itself to the paths referenced by `privateKeyFile` /
 `wireguardConfigFile` / `environmentFiles` options in the modules above.
 
+## Working with flakes
+
+Nix flakes use the **git tree** as the source, not the working directory. This has two important consequences:
+
+- **New files must be staged before evaluation.** Any file you create (e.g. a new module) is invisible to `nix flake check`, `nixos-rebuild build`, and all other flake-aware commands until it is at least staged with `git add`. The build will fail with `path '…' does not exist` otherwise. Always `git add` new files before running a flake check or rebuild.
+- **Uncommitted changes to existing files are visible** once staged, even before committing — the dirty-tree warning (`warning: Git tree '…' is dirty`) is expected and harmless.
+
+Workflow for adding a new module:
+
+```sh
+# 1. Write the file, add an import in configuration.nix
+# 2. Stage both so the flake can see them
+git add modules/new-module.nix configuration.nix
+# 3. Verify evaluation before committing
+nix flake check /home/david/repos/server-config
+# 4. Commit
+git commit …
+```
+
 ## Notes
 
 - This is a config-only repo with no build/test/lint tooling beyond Nix's own evaluation (`nix flake check`) — there is no app code to run.
