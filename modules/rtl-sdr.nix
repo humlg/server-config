@@ -11,6 +11,10 @@
   # apply automatically — run: sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=usb --action=add
   hardware.rtl-sdr.enable = true;
 
+  # The DVB-T kernel driver claims the dongle before librtlsdr can.
+  # Blacklisting it lets rtl_tcp open the device via libusb directly.
+  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
+
   systemd.services.rtl-tcp = {
     description = "RTL-SDR TCP server";
     after = [ "network.target" ];
