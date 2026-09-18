@@ -8,7 +8,8 @@
 
   # Allow the kernel driver to be used by non-root via udev rules.
   # If the dongle was already plugged in before first deploy, the rules won't
-  # apply automatically — run: sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=usb --action=add
+  # apply automatically — run: sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=usb --attr-match=idVendor=0bda --action=add
+  # (0bda = Realtek; avoid the broader --subsystem-match=usb which re-fires for all USB devices and disrupts libvirt passthrough of other sticks like the CC2531)
   hardware.rtl-sdr.enable = true;
 
   # The DVB-T kernel driver claims the dongle before librtlsdr can.
