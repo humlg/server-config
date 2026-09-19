@@ -8,14 +8,13 @@
     listenPort = 51820;
     privateKeyFile = "/etc/wireguard/wg0-server.key";
 
-    # Add one entry per device, e.g.:
-    # peers = [
-    #   {
-    #     publicKey = "<device public key>";
-    #     allowedIPs = [ "10.100.0.2/32" ];
-    #   }
-    # ];
-    peers = [ ];
+    peers = [
+      # david-phone (added 2026-09-19)
+      {
+        publicKey = "PtYWTzI5vDdJpnm7HPKGsY12vs4xxzIHrc55dZOeHyY=";
+        allowedIPs = [ "10.100.0.2/32" ];
+      }
+    ];
   };
 
   # Lets wg0 peers reach the rest of 192.168.4.0/23 through HomeLab, not
