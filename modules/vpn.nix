@@ -14,6 +14,11 @@
         publicKey = "PtYWTzI5vDdJpnm7HPKGsY12vs4xxzIHrc55dZOeHyY=";
         allowedIPs = [ "10.100.0.2/32" ];
       }
+      # saruman (added 2026-09-19)
+      {
+        publicKey = "6GnexhHqRdmRk9YPWxttwjOdHjYqu8hw/uf/W4OoMgc=";
+        allowedIPs = [ "10.100.0.3/32" ];
+      }
     ];
   };
 
