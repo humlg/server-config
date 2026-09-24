@@ -8,9 +8,11 @@
 
     servers.main = {
       enable = true;
-      # Verify the exact attribute name after `nix flake update`:
-      #   nix eval .#nixosConfigurations.HomeLab.pkgs.fabricServers --apply builtins.attrNames
-      package = pkgs.fabricServers."fabric-26_2";
+      # Minecraft 26.x requires Java 25 (class file version 69); override the
+      # default jdk21 that nix-minecraft ships with.
+      package = pkgs.fabricServers."fabric-26_2".override {
+        jre_headless = pkgs.jdk25_headless;
+      };
 
       serverProperties = {
         server-port = 25565;
