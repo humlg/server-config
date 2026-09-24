@@ -20,14 +20,16 @@
         max-players = 20;
       };
 
-      # Mods are added via symlinks into the server directory, e.g.:
-      #
-      #   symlinks."mods/distant-horizons.jar" = pkgs.fetchurl {
-      #     url = "https://cdn.modrinth.com/data/<id>/versions/<ver>/distant-horizons-<ver>.jar";
-      #     sha256 = "sha256-<hash>=";
-      #   };
-      #
-      # Mods needed: Distant Horizons (server-side), Xaero's Minimap, Xaero's World Map.
+      symlinks = {
+        "mods/distant-horizons.jar" = pkgs.fetchurl {
+          url = "https://cdn.modrinth.com/data/uCdwusMi/versions/gfi11b05/DistantHorizons-3.3.2-26.3-fabric-neoforge.jar";
+          sha256 = "sha256-JK2PT0D9QaZiM5zNHAFAWndiDy90SAgZlGegzHaSefQ=";
+        };
+        "mods/journeymap.jar" = pkgs.fetchurl {
+          url = "https://cdn.modrinth.com/data/lfHFW1mp/versions/FTYEzxSQ/journeymap-fabric-26.3-6.0.9.jar";
+          sha256 = "sha256-3PPp6IAtq/tqyeF+9Dxcv7mJgI2TIcZWwSAfJhsTAew=";
+        };
+      };
     };
   };
 
