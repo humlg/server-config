@@ -92,7 +92,7 @@
   users.users.david = {
     isNormalUser = true;
     description = "David";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "minecraft" ];
     shell = pkgs.zsh;
   };
 
