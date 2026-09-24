@@ -8,9 +8,8 @@
 
     servers.main = {
       enable = true;
-      # Minecraft 26.x requires Java 25 (class file version 69); override the
-      # default jdk21 that nix-minecraft ships with.
-      package = pkgs.fabricServers."fabric-26_2".override {
+      # Minecraft 26.x requires Java 25; override the default jdk21 that nix-minecraft ships with.
+      package = pkgs.fabricServers."fabric-26_3".override {
         jre_headless = pkgs.jdk25_headless;
       };
 
