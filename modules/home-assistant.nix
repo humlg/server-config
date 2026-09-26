@@ -38,7 +38,9 @@ in
     script = ''
       uri="qemu:///system"
 
-      virsh -c "$uri" net-define ${bridgeNetworkXml}
+      if ! virsh -c "$uri" net-info host-bridge &>/dev/null; then
+        virsh -c "$uri" net-define ${bridgeNetworkXml}
+      fi
       virsh -c "$uri" net-autostart host-bridge 2>/dev/null || true
       virsh -c "$uri" autostart homeassistant --disable 2>/dev/null || true
 
