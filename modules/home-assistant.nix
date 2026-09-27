@@ -9,8 +9,27 @@ let
       <bridge name='br0'/>
     </network>
   '';
+
+  # USB passthrough descriptor for the CC2531 Zigbee adapter (vendor/product only —
+  # no bus/device address so it works regardless of which port it enumerates on).
+  zigbeeHostdevXml = pkgs.writeText "zigbee-hostdev.xml" ''
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <vendor id='0x0451'/>
+        <product id='0x16a8'/>
+      </source>
+    </hostdev>
+  '';
 in
 {
+  # Hot-plug the CC2531 Zigbee adapter into the HAOS VM whenever it (re-)enumerates.
+  # This decouples zigbee availability from VM start order: the VM can start before
+  # the USB device is ready, and a replug or re-enumeration will still attach it.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="0451", ATTR{idProduct}=="16a8", \
+      RUN+="${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/sleep 2; ${pkgs.libvirt}/bin/virsh -c qemu:///system attach-device homeassistant ${zigbeeHostdevXml} --live 2>/dev/null || true'"
+  '';
+
   virtualisation.libvirtd = {
     enable = true;
     qemu.runAsRoot = false;
@@ -38,9 +57,7 @@ in
     script = ''
       uri="qemu:///system"
 
-      if ! virsh -c "$uri" net-info host-bridge &>/dev/null; then
-        virsh -c "$uri" net-define ${bridgeNetworkXml}
-      fi
+      virsh -c "$uri" net-define ${bridgeNetworkXml} 2>/dev/null || true
       virsh -c "$uri" net-autostart host-bridge 2>/dev/null || true
       virsh -c "$uri" autostart homeassistant --disable 2>/dev/null || true
 
