@@ -119,6 +119,20 @@
   services.thermald.enable = true;
   services.smartd.enable = true;
 
+  # Keep battery between 50–70% since this machine runs permanently on AC.
+  systemd.services.battery-charge-threshold = {
+    description = "Set battery charge thresholds";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "set-battery-thresholds" ''
+        echo 50 > /sys/class/power_supply/BAT0/charge_control_start_threshold
+        echo 70 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+      '';
+    };
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. Do not bump this on an existing system.
