@@ -20,14 +20,27 @@ let
       </source>
     </hostdev>
   '';
+
+  # Unbind any host interface drivers (cdc_acm) from the CC2531 so QEMU can claim
+  # the device, then hot-plug it into the HAOS VM.  Called by the udev rule with
+  # the kernel device name (e.g. "1-1") as $1.
+  zigbeeAttachScript = pkgs.writeScript "zigbee-attach" ''
+    #!/bin/sh
+    for iface in /sys/bus/usb/devices/"$1":*; do
+      [ -L "$iface/driver" ] || continue
+      drv=$(${pkgs.coreutils}/bin/readlink -f "$iface/driver")
+      ${pkgs.coreutils}/bin/basename "$iface" > "$drv/unbind" 2>/dev/null || true
+    done
+    ${pkgs.coreutils}/bin/sleep 2
+    ${pkgs.libvirt}/bin/virsh -c qemu:///system attach-device homeassistant ${zigbeeHostdevXml} --live 2>/dev/null || true
+  '';
 in
 {
   # Hot-plug the CC2531 Zigbee adapter into the HAOS VM whenever it (re-)enumerates.
-  # This decouples zigbee availability from VM start order: the VM can start before
-  # the USB device is ready, and a replug or re-enumeration will still attach it.
+  # Unbinding cdc_acm first ensures QEMU can claim the interfaces without a fight.
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ACTION=="add", ATTR{idVendor}=="0451", ATTR{idProduct}=="16a8", \
-      RUN+="${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/sleep 2; ${pkgs.libvirt}/bin/virsh -c qemu:///system attach-device homeassistant ${zigbeeHostdevXml} --live 2>/dev/null || true'"
+      RUN+="${zigbeeAttachScript} %k"
   '';
 
   virtualisation.libvirtd = {
