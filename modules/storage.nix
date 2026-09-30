@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # Second disk: 931G ext4, label "data" — bulk storage for media,
@@ -7,6 +7,27 @@
     device = "/dev/disk/by-uuid/5c4e9589-1044-4240-8dd8-64e9a3d53d7c";
     fsType = "ext4";
   };
+
+  # WD EX2 Ultra NAS — permanent media library (movies, TV shows).
+  # Credentials in /etc/nas-credentials (deployed out-of-band):
+  #   username=...
+  #   password=...
+  # Pre-create movies/ and tv/ on the NAS share before first rebuild.
+  fileSystems."/mnt/nas" = {
+    device = "//NAS_IP/SHARE_NAME";
+    fsType = "cifs";
+    options = [
+      "_netdev" "nofail"
+      "x-systemd.automount"
+      "x-systemd.mount-timeout=30"
+      "credentials=/etc/nas-credentials"
+      "gid=media"
+      "dir_mode=0775"
+      "file_mode=0664"
+    ];
+  };
+
+  environment.systemPackages = [ pkgs.cifs-utils ];
 
   users.groups.media = { };
 

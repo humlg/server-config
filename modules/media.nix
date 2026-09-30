@@ -21,6 +21,8 @@
       rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enabled = false;
       rpc-host-whitelist-enabled = false;
+      ratio-limit = 2.0;
+      ratio-limit-enabled = true;
     };
   };
 
@@ -40,6 +42,18 @@
   # doesn't need the shared "media" group.
   services.prowlarr = {
     enable = true;
+    openFirewall = true;
+  };
+
+  services.radarr = {
+    enable = true;
+    group = "media";
+    openFirewall = true;
+  };
+
+  services.bazarr = {
+    enable = true;
+    group = "media";
     openFirewall = true;
   };
 
