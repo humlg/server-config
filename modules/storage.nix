@@ -14,7 +14,7 @@
   #   password=...
   # Pre-create movies/ and tv/ on the NAS share before first rebuild.
   fileSystems."/mnt/nas" = {
-    device = "//NAS_IP/SHARE_NAME";
+    device = "//192.168.4.180/Public";
     fsType = "cifs";
     options = [
       "_netdev" "nofail"
