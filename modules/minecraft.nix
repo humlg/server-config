@@ -8,7 +8,9 @@
 
     servers.main = {
       enable = true;
-      jvmOpts = "-Xms2G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+UseStringDeduplication";
+      # ZGC: concurrent, near-zero pause GC — much better than G1 for avoiding multi-second freezes.
+      # Equal Xms/Xmx avoids heap-expansion GC cycles entirely.
+      jvmOpts = "-Xms8G -Xmx8G -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+UseStringDeduplication";
       # Minecraft 26.x requires Java 25; override the default jdk21 that nix-minecraft ships with.
       package = pkgs.fabricServers."fabric-26_3".override {
         jre_headless = pkgs.jdk25_headless;
