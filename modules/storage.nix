@@ -12,7 +12,7 @@
   # Credentials in /etc/nas-credentials (deployed out-of-band):
   #   username=...
   #   password=...
-  # Pre-create movies/ and tv/ on the NAS share before first rebuild.
+  # Radarr root: /mnt/nas/Filmy — Sonarr root: /mnt/nas/Serialy (pre-existing dirs).
   fileSystems."/mnt/nas" = {
     device = "//192.168.4.180/Public";
     fsType = "cifs";
