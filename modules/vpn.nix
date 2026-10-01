@@ -44,7 +44,9 @@
     wireguardConfigFile = "/etc/wireguard/egress.conf";
 
     # Who's allowed to reach Transmission's RPC/web UI (port-mapped below):
-    # localhost (Sonarr, running in the default netns) and the LAN.
+    # the LAN and the host itself. Note: the DNAT rule is PREROUTING-only, so
+    # services on the host (Sonarr, Radarr) must connect via 192.168.15.1:9091
+    # (Transmission's veth IP inside the namespace) — localhost:9091 won't work.
     accessibleFrom = [
       "127.0.0.1"
       "192.168.4.0/23"
