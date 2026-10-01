@@ -60,6 +60,19 @@
   # Homarr has no nixpkgs module — run it as a container.
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
+  # FlareSolverr bypasses CloudFlare JS challenges for Prowlarr indexers
+  # that would otherwise be blocked (e.g. 1337x). Configure in Prowlarr at
+  # Settings → Indexers → Add → FlareSolverr, URL http://localhost:8191.
+  virtualisation.oci-containers.containers.flaresolverr = {
+    image = "ghcr.io/flaresolverr/flaresolverr:latest";
+    autoStart = true;
+    ports = [ "8191:8191" ];
+    environment = {
+      TZ = "Europe/Prague";
+      LOG_LEVEL = "info";
+    };
+  };
+
   virtualisation.oci-containers.containers.homarr = {
     image = "ghcr.io/homarr-labs/homarr:latest";
     autoStart = true;
@@ -79,5 +92,5 @@
     "d /mnt/data/homarr 0755 root root -"
   ];
 
-  networking.firewall.allowedTCPPorts = [ 7575 ];
+  networking.firewall.allowedTCPPorts = [ 7575 8191 ];
 }
