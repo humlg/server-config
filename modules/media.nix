@@ -14,6 +14,9 @@
   services.transmission = {
     enable = true;
     group = "media";
+    # rpc-username and rpc-password deployed out-of-band to
+    # /etc/transmission/credentials as JSON, not committed to git.
+    credentialsFile = "/etc/transmission/credentials";
     settings = {
       download-dir = "/mnt/data/downloads/complete";
       incomplete-dir = "/mnt/data/downloads/incomplete";
@@ -21,6 +24,7 @@
       rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enabled = false;
       rpc-host-whitelist-enabled = false;
+      rpc-authentication-required = true;
       ratio-limit = 2.0;
       ratio-limit-enabled = true;
     };
