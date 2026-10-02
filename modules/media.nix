@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   services.jellyfin = {
@@ -6,6 +6,8 @@
     group = "media";
     openFirewall = true;
   };
+
+  environment.systemPackages = [ pkgs.jellyfin-ffmpeg ];
 
   # Torrent traffic is confined to the "egress" netns (see modules/vpn.nix)
   # so it only ever leaves through the VPN provider's tunnel — if that
