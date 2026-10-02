@@ -7,6 +7,14 @@
     openFirewall = true;
   };
 
+  # Intel VAAPI/Quick Sync hardware transcoding for Jellyfin (i5-8300H).
+  # After rebuild, enable in Jellyfin: Dashboard → Playback → Hardware acceleration → VAAPI.
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.intel-media-driver ];
+  };
+  users.users.jellyfin.extraGroups = [ "video" "render" ];
+
   environment.systemPackages = [ pkgs.jellyfin-ffmpeg ];
 
   # Torrent traffic is confined to the "egress" netns (see modules/vpn.nix)
