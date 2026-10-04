@@ -44,9 +44,10 @@
     wireguardConfigFile = "/etc/wireguard/egress.conf";
 
     # Who's allowed to reach Transmission's RPC/web UI (port-mapped below):
-    # the LAN and the host itself. Note: the DNAT rule is PREROUTING-only, so
-    # services on the host (Sonarr, Radarr) must connect via 192.168.15.1:9091
-    # (Transmission's veth IP inside the namespace) — localhost:9091 won't work.
+    # the LAN and the host itself. Two addresses depending on the caller:
+    #   LAN devices / laptop : 192.168.5.1:9091  (HomeLab's LAN IP; DNAT forwards into namespace)
+    #   Host services (Sonarr, Radarr): 192.168.15.1:9091  (veth IP directly into namespace)
+    # localhost:9091 won't work from the host — the DNAT rule is PREROUTING-only.
     accessibleFrom = [
       "127.0.0.1"
       "192.168.4.0/23"
