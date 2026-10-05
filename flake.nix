@@ -3,9 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    # Pinned to the last nixpkgs-unstable commit before jellyfin was bumped to 12.0,
-    # so we can pull jellyfin 10.11.11 via an overlay.
-    nixpkgs-jellyfin.url = "github:NixOS/nixpkgs/42312a0b94ed53886ba86959ea099d9f6cdf2355";
+    # nixos-25.11 lags behind on jellyfin; track unstable for it instead.
+    nixpkgs-jellyfin.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-jellyfin.flake = false;
     vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";

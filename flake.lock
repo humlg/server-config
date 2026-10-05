@@ -55,17 +55,17 @@
     "nixpkgs-jellyfin": {
       "flake": false,
       "locked": {
-        "lastModified": 1788995436,
-        "narHash": "sha256-PGkrg3/D+MFozFYaLWvaZDMGJiKqspwBq2cy5DabvJs=",
+        "lastModified": 1791048980,
+        "narHash": "sha256-KgItSKML8Xvte0B7/uGnBDsYzSnnKHcOaiUbgWBXLXw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "42312a0b94ed53886ba86959ea099d9f6cdf2355",
+        "rev": "a7868a727837f3c09cee2ce0ca671c76b1589fed",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
-        "rev": "42312a0b94ed53886ba86959ea099d9f6cdf2355",
         "type": "github"
       }
     },
