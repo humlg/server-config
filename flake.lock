@@ -23,11 +23,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1790223794,
-        "narHash": "sha256-NMUY1IK1bAfCdYZAqsmgqN9gTdJGxaHHP+IPkaSQ7PY=",
+        "lastModified": 1791091845,
+        "narHash": "sha256-A/wsEs1mU/7ZVjosE4nevEtOmFBJihKXTEZnds28o/c=",
         "owner": "Infinidoge",
         "repo": "nix-minecraft",
-        "rev": "23ef278ce9e77686ee684db829f9f18fd115a917",
+        "rev": "cb83be32d5cda2301d4ad71a53b9211a1c5eceec",
         "type": "github"
       },
       "original": {
@@ -52,6 +52,23 @@
         "type": "github"
       }
     },
+    "nixpkgs-jellyfin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788995436,
+        "narHash": "sha256-PGkrg3/D+MFozFYaLWvaZDMGJiKqspwBq2cy5DabvJs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "42312a0b94ed53886ba86959ea099d9f6cdf2355",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "42312a0b94ed53886ba86959ea099d9f6cdf2355",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1782847189,
@@ -72,6 +89,7 @@
       "inputs": {
         "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-jellyfin": "nixpkgs-jellyfin",
         "vpn-confinement": "vpn-confinement"
       }
     },
@@ -92,11 +110,11 @@
     },
     "vpn-confinement": {
       "locked": {
-        "lastModified": 1788035501,
-        "narHash": "sha256-3Xs9lCMwjvFURU7/fPEGDR5kCKvcdX2l5Fah1nZoaGQ=",
+        "lastModified": 1789394839,
+        "narHash": "sha256-trdjVJKmDBbzgbP8pd+R7iKbGkdRu0nmXgQlBR/hEiU=",
         "owner": "Maroka-chan",
         "repo": "VPN-Confinement",
-        "rev": "ce8949125b698406810ea71a8bd7b567d9a0b09f",
+        "rev": "a21f66ccd9f644c3770ccdf287cb380c00192628",
         "type": "github"
       },
       "original": {
