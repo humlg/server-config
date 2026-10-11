@@ -21,6 +21,7 @@
         online-mode = true;
         difficulty = "normal";
         max-players = 20;
+        "pause-when-empty-seconds" = 60;
       };
 
       symlinks = {
