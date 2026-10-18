@@ -10,6 +10,7 @@
     ./modules/home-assistant.nix
     ./modules/minecraft.nix
     ./modules/rtl-sdr.nix
+    ./modules/hermes.nix
   ];
 
   # Bootloader.
