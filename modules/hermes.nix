@@ -4,8 +4,13 @@
   services.hermes-agent = {
     enable = true;
     stateDir = "/mnt/data/hermes";
-    # API keys (ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.) — deployed out-of-band to /etc/hermes-env
-    environmentFiles = [ "/etc/hermes-env" ];
+    settings.model = {
+      provider = "custom";
+      base_url = "http://192.168.4.133:11434/v1";
+      default = "huihui_ai/qwen3-abliterated:14b";
+      # Ollama's OpenAI-compatible API doesn't advertise context length; set it explicitly.
+      context_length = 64000;
+    };
   };
 
   # Dashboard (9119) and gateway API (8642) on the LAN interface only.
