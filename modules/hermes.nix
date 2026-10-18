@@ -20,7 +20,7 @@
     "d /mnt/data/hermes 0755 root root -"
   ];
 
-  # Seed initial Ollama model config on first deploy; does not overwrite.
+  # Seed initial config on first deploy; does not overwrite.
   system.activationScripts.hermes-initial-config.text = ''
     mkdir -p /mnt/data/hermes
     if [ ! -f /mnt/data/hermes/config.yaml ]; then
@@ -30,6 +30,10 @@
       base_url: "http://192.168.4.133:11434/v1"
       default: "huihui_ai/qwen3-abliterated:14b"
       context_length: 64000
+    dashboard:
+      basic_auth:
+        username: david
+        password_hash: "scrypt$16384$8$1$PnulUQY7jhtoNNckj1Tgtw==$caEJeXt0DCmNK6kpMiLt9x6fEiiAhL337mMcUaXO+Mw="
     YAML
     fi
   '';
