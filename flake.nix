@@ -8,10 +8,9 @@
     nixpkgs-jellyfin.flake = false;
     vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
-    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-jellyfin, vpn-confinement, nix-minecraft, hermes-agent, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-jellyfin, vpn-confinement, nix-minecraft, ... }: {
     nixosConfigurations.HomeLab = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -28,7 +27,6 @@
         ./configuration.nix
         vpn-confinement.nixosModules.default
         nix-minecraft.nixosModules.minecraft-servers
-        hermes-agent.nixosModules.default
       ];
     };
   };

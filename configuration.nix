@@ -60,9 +60,6 @@
     auto-optimise-store = true;
   };
 
-  # hermes-agent's large closure pushed the daemon over the default fd limit.
-  systemd.services.nix-daemon.serviceConfig.LimitNOFILE = "1048576";
-
   nix.gc = {
     automatic = true;
     dates = "weekly";
