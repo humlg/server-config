@@ -11,6 +11,7 @@
     ./modules/minecraft.nix
     ./modules/rtl-sdr.nix
     ./modules/hermes.nix
+    ./modules/miniflux.nix
   ];
 
   # Bootloader.
