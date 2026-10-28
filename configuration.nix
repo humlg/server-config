@@ -94,7 +94,7 @@
   users.users.david = {
     isNormalUser = true;
     description = "David";
-    extraGroups = [ "networkmanager" "wheel" "minecraft" ];
+    extraGroups = [ "networkmanager" "wheel" "minecraft" "media" "hass" "qemu-libvirtd" ];
     shell = pkgs.zsh;
   };
 
