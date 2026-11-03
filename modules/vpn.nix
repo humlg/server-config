@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # --- Road-warrior server: lets a phone/laptop VPN in from outside and
@@ -39,6 +39,33 @@
   # provider's tunnel, with a kill switch if the tunnel drops. See
   # modules/media.nix for the systemd.services.transmission.vpnConfinement
   # wiring. ---
+  systemd.services.egress-heartbeat = {
+    description = "Uptime Kuma heartbeat for egress VPN tunnel";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "egress-heartbeat" ''
+        if systemctl is-active --quiet egress.service && \
+           ${pkgs.iproute2}/bin/ip netns exec egress \
+             ${pkgs.curl}/bin/curl -sf --max-time 5 http://detectportal.firefox.com/success.txt > /dev/null 2>&1; then
+          status=up msg=OK
+        else
+          status=down msg=tunnel-down
+        fi
+        ${pkgs.curl}/bin/curl -sf \
+          "http://192.168.4.151:3001/api/push/tk5AK9rCmUhcRRt5HRWDpKfCZYUCKffU?status=$status&msg=$msg&ping=" \
+          || true
+      '';
+    };
+  };
+
+  systemd.timers.egress-heartbeat = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "30s";
+      OnUnitActiveSec = "50s";
+    };
+  };
+
   vpnNamespaces.egress = {
     enable = true;
     wireguardConfigFile = "/etc/wireguard/egress.conf";
