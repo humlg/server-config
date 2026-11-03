@@ -5,7 +5,9 @@
     image = "nousresearch/hermes-agent:latest";
     autoStart = true;
     cmd = [ "gateway" "run" ];
-    ports = [ "8642:8642" "9119:9119" ];
+    # Host networking so the container sits on the LAN (br0) and can send
+    # Wake-on-LAN broadcasts to the Ollama host. Ports bind directly on the host.
+    extraOptions = [ "--network=host" ];
     volumes = [ "/mnt/data/hermes:/opt/data" ];
     environment = {
       HERMES_DASHBOARD = "1";
